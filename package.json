@@ -1,6 +1,6 @@
 {
   "name": "@bizmyth/pi-review",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A read-only branch review command for the Pi coding agent",
   "type": "module",
   "license": "MIT",
