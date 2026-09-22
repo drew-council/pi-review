@@ -182,7 +182,11 @@ function messageText(message: MessageLike): string | undefined {
 export function isolateReviewMessages<T extends MessageLike>(messages: T[], reviewPrompt: string): T[] {
   for (let index = messages.length - 1; index >= 0; index--) {
     const message = messages[index];
-    if (message?.role === "user" && messageText(message) === reviewPrompt) return messages.slice(index);
+    if (message?.role !== "user" || messageText(message) !== reviewPrompt) continue;
+    // pi >= 0.86 encodes tool declarations in transcript system messages;
+    // dropping them leaves the review turn with zero tools.
+    const retainedPrefix = messages.slice(0, index).filter((m) => m?.role === "system");
+    return [...retainedPrefix, ...messages.slice(index)];
   }
   return messages;
 }

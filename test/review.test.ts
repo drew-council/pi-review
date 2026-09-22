@@ -100,3 +100,16 @@ test("isolates a review turn from earlier conversation while retaining its tool 
 
   assert.deepEqual(isolateReviewMessages(messages, prompt), messages.slice(2));
 });
+
+test("isolating retains system messages so providers still see tool declarations", () => {
+  const prompt = "Review branch against main";
+  const messages = [
+    { role: "system", content: "", toolsAdded: [{ name: "bash" }] },
+    { role: "user", content: "Implement the feature" },
+    { role: "assistant", content: [{ type: "text", text: "Done" }] },
+    { role: "user", content: [{ type: "text", text: prompt }] },
+  ];
+
+  // pi >= 0.86 derives the request's tools from surviving system messages.
+  assert.deepEqual(isolateReviewMessages(messages, prompt), [messages[0], messages[3]]);
+});
