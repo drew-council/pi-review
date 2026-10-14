@@ -161,6 +161,8 @@ export function renderReviewOutput(output: ReviewOutput): string {
       for (const bodyLine of finding.body.split("\n")) lines.push(`  ${bodyLine}`);
     }
     sections.push(lines.join("\n"));
+  } else {
+    sections.push("No review findings.");
   }
 
   return sections.join("\n\n") || "Reviewer failed to output a response.";

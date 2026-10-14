@@ -88,6 +88,19 @@ test("parses Codex review JSON and renders the user-facing review", () => {
   );
 });
 
+test("renders an explicit line when there are no review findings", () => {
+  const output = parseReviewOutput(
+    JSON.stringify({
+      findings: [],
+      overall_correctness: "patch is correct",
+      overall_explanation: "The change is clean and well-tested.",
+      overall_confidence_score: 0.95,
+    }),
+  );
+  assert.ok(output);
+  assert.equal(renderReviewOutput(output), "The change is clean and well-tested.\n\nNo review findings.");
+});
+
 test("isolates a review turn from earlier conversation while retaining its tool exchange", () => {
   const prompt = "Review branch against main";
   const messages = [
